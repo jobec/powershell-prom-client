@@ -4,6 +4,12 @@ This Powershell module makes it easy to build a custom prometheus exporter based
 
 It's inspired and based on the Go client and works in sort of the same way.
 
+## Installing
+
+```powershell
+Install-Module -Name PrometheusExporter
+```
+
 ## Usage
 
 All steps below are combined in the [example.ps1](example.ps1) file in this repository.
