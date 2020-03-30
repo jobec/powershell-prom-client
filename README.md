@@ -6,6 +6,8 @@ It's inspired and based on the Go client and works in sort of the same way.
 
 ## Usage
 
+All steps below are combined in the [example.ps1](example.ps1) file in this repository.
+
 First, import this module
 
 ```powershell

@@ -18,6 +18,6 @@ function collector () {
     )
 }
 
-$exp = New-PrometheusExporter -Port 8081
+$exp = New-PrometheusExporter -Port 9700
 Register-Collector -Exporter $exp -Collector $Function:collector
 $exp.Start()
