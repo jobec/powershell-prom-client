@@ -60,3 +60,23 @@ rras_connections{protocol="all"} 563
 rras_connections{protocol="ikev2"} 439
 rras_connections{protocol="sstp"} 124
 ```
+
+## Running as a service
+
+Running a powershell script as a windows service is possible by using [NSSM](https://nssm.cc/download).
+
+Use the snippet below to install it as a service:
+
+```powershell
+$serviceName = 'MyExporter'
+$nssm = "c:\path\to\nssm.exe"
+$powershell = (Get-Command powershell).Source
+$scriptPath = 'c:\program files\your_exporter\exporter.ps1'
+$arguments = '-ExecutionPolicy Bypass -NoProfile -File """{0}"""' -f $scriptPath
+
+& $nssm install $serviceName $powershell $arguments
+Start-Service $serviceName
+
+# Substitute the port below with the one you picked for your exporter
+New-NetFirewallRule -DisplayName "My Exporter" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 9700
+```
