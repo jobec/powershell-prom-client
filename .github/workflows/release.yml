@@ -1,0 +1,19 @@
+name: Release to PSGallery
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  release:
+    types: published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Release to PSGallery
+      env:
+        PSGALLERY_TOKEN: ${{secrets.PSGALLERY_TOKEN}}
+        MODULE_VERSION: ${{github.event.release.tag_name}}
+      run: .github\workflows\release.ps1
+      shell: pwsh
