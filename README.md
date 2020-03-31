@@ -1,5 +1,7 @@
 # PowerShell Prometheus Client
 
+[![](https://img.shields.io/powershellgallery/v/PrometheusExporter.svg)](https://www.powershellgallery.com/packages/PrometheusExporter)
+
 This Powershell module makes it easy to build a custom prometheus exporter based on PowerShell.
 
 It's inspired and based on the Go client and works in sort of the same way.
