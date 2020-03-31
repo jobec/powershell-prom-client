@@ -17,18 +17,18 @@ class MetricDesc {
         if (-Not $this.isValidName($Name)) {
             throw "Not a valid metric name: $Name"
         }
-        foreach ($Label in $Labels){
+        foreach ($Label in $Labels) {
             if (-Not $this.isValidName($Label)) {
                 throw "Not a valid label name: $Label"
             }
         }
-        $this.Name   = $Name
-        $this.Type   = $Type
-        $this.Help   = $Help -replace "[\r\n]+", " "  # Strip out new lines
+        $this.Name = $Name
+        $this.Type = $Type
+        $this.Help = $Help -replace "[\r\n]+", " "  # Strip out new lines
         $this.Labels = $Labels
     }
-    
-    hidden [bool] isValidName([string] $Name){
+
+    hidden [bool] isValidName([string] $Name) {
         # Notice the : is removed from the regex as those should not be used by exporters
         # according to the documentation
         return $Name -match "^[a-zA-Z_][a-zA-Z0-9_]*$"
@@ -47,15 +47,15 @@ class Metric {
     }
 
     [String] ToString() {
-        $FinalLabels =  [System.Collections.Generic.List[String]]::new()
+        $FinalLabels = [System.Collections.Generic.List[String]]::new()
         if ($this.Descriptor.Labels.Count -gt 0) {
-            if($this.Descriptor.Labels.Count -ne $this.Labels.Count) {
+            if ($this.Descriptor.Labels.Count -ne $this.Labels.Count) {
                 throw "Less metric labels specified than there are labels in the descriptor"
             }
-            for ($i=0; $i -lt $this.Descriptor.Labels.Count; $i++) {
+            for ($i = 0; $i -lt $this.Descriptor.Labels.Count; $i++) {
                 $l = $this.Descriptor.Labels[$i]
                 $v = $this.Labels[$i]
-                $v = $v.Replace("\","\\").Replace("""", "\""").Replace("`n", "\n")
+                $v = $v.Replace("\", "\\").Replace("""", "\""").Replace("`n", "\n")
                 $FinalLabels.Add("$l=`"$v`"")
             }
             $StringLabels = $FinalLabels -join ","
@@ -78,8 +78,8 @@ class Channel {
     [String] ToString() {
         $Lines = [System.Collections.Generic.List[String]]::new()
         $LastDescriptor = $null
-        foreach($m in $this.Metrics){
-            if($m.Descriptor -ne $LastDescriptor){
+        foreach ($m in $this.Metrics) {
+            if ($m.Descriptor -ne $LastDescriptor) {
                 $LastDescriptor = $m.Descriptor
                 $name = $LastDescriptor.Name
                 $help = $LastDescriptor.Help
@@ -165,7 +165,7 @@ class Exporter {
                 $StatusCode = $Response.StatusCode
                 $Method = $Request.HttpMethod
                 $Path = $Request.Url.LocalPath
-                if ($null -eq $Request.RemoteEndPoint){
+                if ($null -eq $Request.RemoteEndPoint) {
                     $RemoteAddr = "-"
                 } else {
                     $RemoteAddr = $Request.RemoteEndPoint.ToString()
@@ -180,34 +180,34 @@ class Exporter {
     }
 }
 
-function New-LogMessage([String] $Msg){
+function New-LogMessage([String] $Msg) {
     Write-Host "$(Get-Date -Format o) $Msg"
 }
 
 function New-MetricDescriptor(
-    [Parameter(Mandatory=$true)][String] $Name,
-    [Parameter(Mandatory=$true)][MetricType] $Type,
-    [Parameter(Mandatory=$true)][String] $Help,
+    [Parameter(Mandatory = $true)][String] $Name,
+    [Parameter(Mandatory = $true)][MetricType] $Type,
+    [Parameter(Mandatory = $true)][String] $Help,
     [string[]] $Labels
 ) {
     return [MetricDesc]::new($Name, $Type, $Help, $Labels)
 }
 function New-PrometheusExporter(
-    [Parameter(Mandatory=$true)][uint32] $Port
-){
+    [Parameter(Mandatory = $true)][uint32] $Port
+) {
     return [Exporter]::new($Port)
 }
 
 function Register-Collector (
-    [Parameter(Mandatory=$true)][Exporter] $Exporter,
-    [Parameter(Mandatory=$true)][ScriptBlock] $Collector
+    [Parameter(Mandatory = $true)][Exporter] $Exporter,
+    [Parameter(Mandatory = $true)][ScriptBlock] $Collector
 ) {
     $exporter.Register($Collector)
 }
 
 function New-Metric (
-    [Parameter(Mandatory=$true)][MetricDesc] $MetricDesc,
-    [Parameter(Mandatory=$true)][float] $Value,
+    [Parameter(Mandatory = $true)][MetricDesc] $MetricDesc,
+    [Parameter(Mandatory = $true)][float] $Value,
     [string[]] $Labels
 ) {
     return [Metric]::new($MetricDesc, $Value, $Labels)

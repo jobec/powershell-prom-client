@@ -8,8 +8,8 @@ $CurrentConnections = New-MetricDescriptor -Name "rras_connections" -Type gauge 
 function collector () {
     $RRASConnections = Get-RemoteAccessConnectionStatistics
     $TotalCurrent = $RRASConnections.count
-    $IKEv2 = @($RRASConnections | Where-Object {$_.TunnelType -eq "Ikev2"}).count
-    $SSTP = @($RRASConnections | Where-Object {$_.TunnelType -eq "Sstp"}).count
+    $IKEv2 = @($RRASConnections | Where-Object { $_.TunnelType -eq "Ikev2" }).count
+    $SSTP = @($RRASConnections | Where-Object { $_.TunnelType -eq "Sstp" }).count
     $Cumulative = (Get-RemoteAccessConnectionStatisticsSummary).TotalCumulativeConnections
 
     @(
