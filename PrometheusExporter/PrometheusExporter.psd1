@@ -76,7 +76,7 @@ AliasesToExport = @()
 # DscResourcesToExport = @()
 
 # List of all modules packaged with this module
-ModuleList = @("PrometheusExporter.psm1")
+# ModuleList = @()
 
 # List of all files packaged with this module
 # FileList = @()
