@@ -2,6 +2,8 @@
 enum MetricType {
     counter
     gauge
+    histogram
+    summary
 }
 
 # Metric descriptor class
@@ -12,10 +14,24 @@ class MetricDesc {
     [string[]]   $Labels
 
     MetricDesc([String] $Name, [MetricType] $Type, [String] $Help, [string[]] $Labels) {
+        if (-Not $this.isValidName($Name)) {
+            throw "Not a valid metric name: $Name"
+        }
+        foreach ($Label in $Labels){
+            if (-Not $this.isValidName($Label)) {
+                throw "Not a valid label name: $Label"
+            }
+        }
         $this.Name   = $Name
         $this.Type   = $Type
-        $this.Help   = $Help
+        $this.Help   = $Help -replace "[\r\n]+", " "  # Strip out new lines
         $this.Labels = $Labels
+    }
+    
+    hidden [bool] isValidName([string] $Name){
+        # Notice the : is removed from the regex as those should not be used by exporters
+        # according to the documentation
+        return $Name -match "^[a-zA-Z_][a-zA-Z0-9_]*$"
     }
 }
 

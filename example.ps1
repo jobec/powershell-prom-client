@@ -1,4 +1,6 @@
-Import-Module PrometheusExporter
+$ErrorActionPreference = "Stop"
+
+Import-Module .\PrometheusExporter
 
 $TotalConnections = New-MetricDescriptor -Name "rras_connections_total" -Type counter -Help "Total connections since server start"
 $CurrentConnections = New-MetricDescriptor -Name "rras_connections" -Type gauge -Help "Current established connections" -Labels "protocol"
