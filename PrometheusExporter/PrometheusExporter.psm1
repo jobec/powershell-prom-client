@@ -147,7 +147,7 @@ class Exporter {
                         $PromResponse = $this.Collect()
                         $Response.AddHeader("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
                     } catch {
-                        write-host $_
+                        $_ | Out-Host
                         $Response.StatusCode = 500
                         $PromResponse = 'Internal Server Error'
                     }
@@ -181,7 +181,7 @@ class Exporter {
 }
 
 function New-LogMessage([String] $Msg) {
-    Write-Host "$(Get-Date -Format o) $Msg"
+    "$(Get-Date -Format o) $Msg" | Out-Host
 }
 
 function New-MetricDescriptor(
