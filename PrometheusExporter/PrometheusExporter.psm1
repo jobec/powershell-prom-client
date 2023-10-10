@@ -114,8 +114,6 @@ class Exporter {
     }
 
     Start () {
-        [Console]::TreatControlCAsInput = $True
-
         $Http = [System.Net.HttpListener]::new()
         $Prefix = 'http://+:{0}/' -f $this.Port
         $Http.Prefixes.Add($Prefix)
@@ -127,15 +125,6 @@ class Exporter {
         try {
             while ($Http.IsListening) {
                 $ContextAsync = $http.GetContextAsync()
-                while (-not $ContextAsync.AsyncWaitHandle.WaitOne(200)) {
-                    if ([console]::KeyAvailable) {
-                        $key = [system.console]::readkey($true)
-                        if (($key.modifiers -band [consolemodifiers]"control") -and ($key.key -eq "C")) {
-                            Write-Warning "Quitting, user pressed control C..."
-                            Return
-                        }
-                    }
-                }
                 $Context = $ContextAsync.GetAwaiter().GetResult()
                 $Request = $Context.Request
                 $Response = $Context.Response
