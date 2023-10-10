@@ -160,6 +160,8 @@ class Exporter {
                     $RemoteAddr = $Request.RemoteEndPoint.ToString()
                 }
                 New-LogMessage -Msg "$RemoteAddr ""$Method $Path"" $StatusCode"
+
+                [system.gc]::Collect()
             }
         } finally {
             New-LogMessage -Msg "Stopping exporter."
